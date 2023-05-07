@@ -10,5 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "random-id": "^1.0.4"
   }
 }
