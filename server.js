@@ -36,6 +36,25 @@ app.post("/api/notes", (req, res) => {
     res.json(dataset);
   });
 });
+app.delete("/api/notes/:id", (req, res) => {
+  const deleteId = req.params.id;
+  fs.readFile(`./db/db.json`, "utf8", function (error, data) {
+    let storedNotes = JSON.parse(data);
+    let newNotes;
+    for (let i = 0; i < storedNotes.length; i++) {
+      const element = storedNotes[i].id;
+      if (element == deleteId) {
+        newNotes = storedNotes.splice(i, i);
+      }
+    }
+    const noteString = JSON.stringify(newNotes);
+    // Write the string to a file
+    fs.writeFile(`./db/db.json`, noteString, (err) =>
+      err ? console.error(err) : console.log("Success")
+    );
+    res.json(dataset);
+  });
+});
 
 app.get("/*", (req, res) =>
   res.sendFile(path.join(__dirname, "public", "index.html"))
