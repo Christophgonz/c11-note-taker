@@ -40,14 +40,16 @@ app.delete("/api/notes/:id", (req, res) => {
   const deleteId = req.params.id;
   fs.readFile(`./db/db.json`, "utf8", function (error, data) {
     let storedNotes = JSON.parse(data);
+    let toDelete;
     let newNotes;
     for (let i = 0; i < storedNotes.length; i++) {
       const element = storedNotes[i].id;
       if (element == deleteId) {
-        newNotes = storedNotes.splice(i, i);
+        toDelete = i;
       }
     }
-    const noteString = JSON.stringify(newNotes);
+    storedNotes.splice(toDelete, 1);
+    const noteString = JSON.stringify(storedNotes);
     // Write the string to a file
     fs.writeFile(`./db/db.json`, noteString, (err) =>
       err ? console.error(err) : console.log("Success")
