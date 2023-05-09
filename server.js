@@ -2,7 +2,6 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const dataset = require("./db/db.json");
 const randomId = require("random-id");
 
 // setting up the port and express
@@ -24,8 +23,9 @@ app.get("/notes", (req, res) =>
 );
 
 // get request for displaying the notes
-app.get("/api/notes", (req, res) => res.json(dataset));
-
+app.get("/api/notes", (req, res) =>
+  res.sendFile(path.join(__dirname, `db/db.json`))
+);
 // post request to update the notes
 app.post("/api/notes", (req, res) => {
   // get the request and add a random id
@@ -51,7 +51,7 @@ app.post("/api/notes", (req, res) => {
     fs.writeFile(`./db/db.json`, noteString, (err) =>
       err ? console.error(err) : console.log("Success")
     );
-    res.json(dataset);
+    res.json(storedNotes);
   });
 });
 
@@ -81,7 +81,7 @@ app.delete("/api/notes/:id", (req, res) => {
     fs.writeFile(`./db/db.json`, noteString, (err) =>
       err ? console.error(err) : console.log("Success")
     );
-    res.json(dataset);
+    res.json(storedNotes);
   });
 });
 
